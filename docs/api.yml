@@ -180,4 +180,6 @@ components:
     # dispatch authors from, creating or updating book
     # oas-TD2 STD22050(nouvelle branche)
     # git branch -m "nom de ma nouvelle branche"
-
+    #TD2-A : faire le mmeme schema et le topic lassa misy get put delete ( crée des endpoint pour ce faire : books/authors)
+    #TD2-B : mettre une parametre (filtre de paginations am resaka topics si books)
+    #TD2-C : associée topics et authors ( endpoint : authorstopics, manana get avec toute les caractéristiques de authors et topics apart)
