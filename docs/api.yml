@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Library API
-  version: 1.0.0
+  version: 1.0.1
   description: STD22050
 servers:
   - url: https://library.com
@@ -52,14 +52,14 @@ paths:
                   
     put:
       summary: Create or update a list of books
-      operationId: crupdateBooks
+      operationId: crupdateBook
       requestBody:
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/Book"
+                $ref: "#/components/schemas/CrupdateBook"
       responses:
         200:
           description: The list of created or updated books
@@ -131,7 +131,29 @@ paths:
 
 components:
   schemas:
+   
     Book:
+      allOf:
+        - $ref: "#/components/schemas/crupdateBook"
+      properties:
+        author:
+          $ref: "#/components/schemas/Author"
+
+
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+            - M
+            - F
+
+    crupdateBook:
       type: object
       properties:
         id:
@@ -139,7 +161,6 @@ components:
         bookName:
           type: string
         author:
-          #TODO1: set it as a component with properties : id, name, sex (M or F)
           $ref: "#/components/schemas/Author"
           type: string
         pageNumbers:
@@ -154,15 +175,9 @@ components:
           type: string
           format: date
 
-    Author:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        sex:
-          type: string
-          enum:
-            - M
-            - F
+      
+
+    # dispatch authors from, creating or updating book
+    # oas-TD2 STD22050(nouvelle branche)
+    # git branch -m "nom de ma nouvelle branche"
+
