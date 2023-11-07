@@ -125,7 +125,20 @@ paths:
         204:
           description: Author successfully deleted
  
-#book/authors
+  /books/authors:
+    put:
+      summary: Update book-author relationships
+      operationId: updateBookAuthorRelationships
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UpdateBookAuthor'
+      responses:
+        200:
+          description: Book-author relationships updated successfully
   /authors/{page}/{pageSize}:
     get:
       summary: Get paginated list of authors
@@ -190,7 +203,16 @@ components:
           enum:
             - M
             - F
-#update books authors
+    UpdateBookAuthor:
+      type: object
+      properties:
+        bookId:
+          type: string
+        authorId: 
+          type: string
+      required:
+        - "bookId"
+        - "authorId"
       
 
     # dispatch authors from, creating or updating book
