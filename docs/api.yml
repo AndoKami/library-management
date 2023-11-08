@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: Library API
-  version: lastest
-  description: STD22050
+  version: 1.0.1
+  description: STD22028
 servers:
   - url: https://library.com
 paths:
@@ -186,6 +186,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
+
 components:
   schemas:
     Book:
@@ -201,15 +202,7 @@ components:
           type: string
         pageNumbers:
           type: integer
-        topic:
-          type: string
-          enum:
-            - ROMANCE
-            - COMEDY
-            - OTHER
-        releaseDate:
-          type: string
-          format: date
+       #topics to add(3)
     Author:
       type: object
       properties:
