@@ -146,8 +146,8 @@ paths:
           description: Author of the book updated successfully
   /books/{bookID}/topic:
     put:
-      summary: Assign a topic to a book
-      operationId: assignTopicToBook
+      summary: Give a topic to a book
+      operationId: GiveTopicToBook
       parameters:
         - in: path
           name: bookId
@@ -176,10 +176,10 @@ paths:
                 $ref: '#/components/schemas/UpdateBookAuthor'
       responses:
         200:
-          description: Book-author relationships updated successfully
+          description: succes
   /authors/{page}/{pageSize}:
     get:
-      summary: Get paginated list of authors
+      summary: Get paginated author
       operationId: getAuthors
       parameters:
         - in: path
@@ -219,7 +219,7 @@ paths:
             default: 1
         - in: query
           name: pageSize
-          description: Number of topics per page
+          description: Number of topics/page
           required: false
           schema:
             type: integer
@@ -240,7 +240,7 @@ paths:
       operationId: getAuthorTopics
       responses:
         200:
-          description: The list of authors with list topic
+          description: The list of authors & topic
           content:
             application/json:
               schema:
