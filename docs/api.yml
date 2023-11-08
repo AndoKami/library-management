@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: Library API
-  version: 1.0.1
-  description: STD22028
+  version: lastest
+  description: STD22020
 servers:
   - url: https://library.com
 paths:
@@ -144,6 +144,25 @@ paths:
       responses:
         200:
           description: Author of the book updated successfully
+  /books/{bookID}/topic:
+    put:
+      summary: Assign a topic to a book
+      operationId: assignTopicToBook
+      parameters:
+        - in: path
+          name: bookId
+          description: The ID of the book to assign a topic to
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Topic'
+      responses:
+        200:
+          description: Topic assigned to the book successfully
   /books/authors:
     put:
       summary: Update book-author relationships
@@ -186,13 +205,55 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
-
+  /topics:
+    get:
+      summary: Get paginated list of topics
+      operationId: getTopics
+      parameters:
+        - in: query
+          name: page
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: Number of topics per page
+          required: false
+          schema:
+            type: integer
+            default: 50
+      responses:
+        200:
+          description: List of topics with pagination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+  /authorsTopics:
+    get:
+      summary: Get all authorTopics
+      description: The returned authors and list topics.
+      operationId: getAuthorTopics
+      responses:
+        200:
+          description: The list of authors with list topic
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuthorTopics'
 components:
   schemas:
     Book:
       allOf:
         - $ref: '#/components/schemas/CrupdateBook'
         - $ref: '#/components/schemas/Author'
+        - $ref: '#/components/schemas/Topic'
     CrupdateBook:
       type: object
       properties:
@@ -202,12 +263,6 @@ components:
           type: string
         pageNumbers:
           type: integer
-        topic:
-          type: string
-          enum:
-            - ROMANCE
-            - COMEDY
-            - OTHER
         releaseDate:
           type: string
           format: date
@@ -219,10 +274,13 @@ components:
         name:
           type: string
         sex:
-          type: string
-          enum:
-            - M
-            - F
+          allOf:
+            - $ref: '#/components/schemas/Sex'
+    Sex:
+      type: string
+      enum:
+        - M
+        - F
     UpdateBookAuthor:
       type: object
       properties:
@@ -233,7 +291,21 @@ components:
       required:
         - "bookId"
         - "authorId"
-      
+    Topic:
+      type: string
+      enum:
+        - ROMANCE
+        - COMEDY
+        - OTHER
+    AuthorTopics:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Author'
+      properties:
+        topic:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
 
     # dispatch authors from, creating or updating book
     # oas-TD2 STD22050(nouvelle branche)
