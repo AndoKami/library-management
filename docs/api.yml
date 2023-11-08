@@ -202,7 +202,15 @@ components:
           type: string
         pageNumbers:
           type: integer
-       #topics to add(3)
+        topic:
+          type: string
+          enum:
+            - ROMANCE
+            - COMEDY
+            - OTHER
+        releaseDate:
+          type: string
+          format: date
     Author:
       type: object
       properties:
