@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Library API
-  version: 2.1.0
+  version: 2.0.0
   description: STD22050
 servers:
   - url: https://library.com
@@ -18,6 +18,7 @@ paths:
       description: The returned books are ordered by updated datetime.
       operationId: getBooks
       parameters:
+        - $ref: "#/components/parameters/QueryPagination"
         - in: query
           name: bookName
           description: Filter return books by given name
@@ -38,18 +39,6 @@ paths:
           schema:
             type: string
             format: datetime
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: pageSize
-          required: false
-          schema:
-            type: integer
-            default: 50
 
       responses:
         200:
@@ -71,7 +60,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Book'
+                $ref: "#/components/schemas/Book"
       responses:
         200:
           description: The list of created or updated books
@@ -100,9 +89,9 @@ paths:
           content:
             application/json:
               schema:
-               type: array
-               items:
-                $ref: '#/components/schemas/Author'
+                type: array
+                items:
+                  $ref: "#/components/schemas/Author"
     put:
       tags:
         - "authors"
@@ -114,7 +103,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Author'
+                $ref: "#/components/schemas/Author"
       responses:
         200:
           description: The list of created or updated authors
@@ -123,7 +112,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Author'
+                  $ref: "#/components/schemas/Author"
     delete:
       tags:
         - "authors"
@@ -138,25 +127,16 @@ paths:
       responses:
         204:
           description: author deleted
-  /authors/page/{page}/size/{size}:
+
+  
+  /authors/{PathPagination}:
     get:
       summary: retrieve authors with pagination
       tags:
         - "authors"
       parameters:
-        - in: path
-          name: page
-          schema:
-            type: integer
-            default: 1
-          required: true
-        - in: path
-          name: pageSize
-          schema:
-            type: integer
-            default: 50
-          required: true
         - $ref: "#/components/parameters/PathPagination"
+       
       responses:
         200:
           description: OK
@@ -181,9 +161,9 @@ paths:
           schema:
             type: string
       responses:
-         200:
+        200:
           description: Author of the book updated successfully
-         404:
+        404:
           description: author or book's id not found
   /books/authors:
     put:
@@ -194,7 +174,7 @@ paths:
       requestBody:
         content:
           application/json:
-            schema : 
+            schema:
               type: array
               items:
                 $ref: "#/components/schemas/UpdateBookAuthor"
@@ -203,6 +183,49 @@ paths:
           description: Authors for books updated successfully
         404:
           description: authors or books not found
+   
+  /books/import:
+     post:
+      summary: return the list of imported books in JSON or Excel
+      operationId: booksImported
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: array
+              items:
+                $ref: "#/components/schemas/Book"
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Book"
+
+
+      responses:
+        200:
+          $ref: "#/components/responses/200"
+  /authors/import:
+     post:
+      summary: return the list imported of Author in JSON or Excel
+      operationId: AuthorImport
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: array
+              items:
+                $ref: "#/components/schemas/Author"
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Author"
+
+
+      responses:
+        200:
+          $ref: "#/components/responses/200"
 components:
   schemas:
     Book:
@@ -211,8 +234,7 @@ components:
       properties:
         author:
           $ref: "#/components/schemas/Author"
-          
-        
+
     Author:
       type: object
       properties:
@@ -247,34 +269,81 @@ components:
     UpdateBookAuthor:
       type: object
       properties:
-        bookId: 
+        bookId:
           type: string
         authorId:
           type: string
+    status: 
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    body:
+      type: object
+    BaseResponse:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/status"
+        body:
+          $ref: "#/components/schemas/body"
+    Response200:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+    Response400:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+    Response403:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+    Response500:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+      
+      
+      
+    
 
   parameters:
-      pageQueryPagination:
-        name: page
-        in: query
-        schema:
-          type: integer
-          default: 1   
-      pageSizeQueryPagination:
-        name: pageSize
-        in: query
-        schema:
-          type: integer
-          default: 50 
-      PathPagination:
-        name: PathPagination
-        in: path
-        required: true
-        schema:
-          type: object
-          properties:
-            page:
-              type: integer
-              default : 1
-            size:
-              type: integer
-              default : 50    
+    QueryPagination:
+      name: QueryPagination
+      in: query
+      required: false
+      schema:
+        type: object
+        properties:
+          page:
+            type: integer
+            default : 1
+          pageSize:
+            type: integer
+            default : 50
+            
+    PathPagination:
+      name: PathPagination
+      in: path
+      required: true
+      schema:
+        type: object
+        properties:
+          page:
+            type: integer
+            default : 1
+          size:
+            type: integer
+            default : 50fanomezana@X555LPB:~/Vidéos/library-management/docs$ 
+  responses:
+    200:
+      $ref: "#/components/schemas/Response200"
+      description: operation successfully
+    400:
+      $ref: "#/components/schemas/Response400"
+      description: Bad resquest
+    403:
+      $ref: "#/components/schemas/Response403"
+      description: Forbidden
+    500:
+      $ref: "#/components/schemas/Response500"
+      description: Internal server error 
