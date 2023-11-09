@@ -59,7 +59,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
+                  $ref: "#/components/schemas/Book"
     put:
       tags:
         - "books"
@@ -80,7 +80,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
+                  $ref: "#/components/schemas/Book"
 
   /authors:
     get:
@@ -250,3 +250,11 @@ components:
           type: string
         authorId:
           type: string
+
+  parameters:
+      pageQueryPagination:
+        name: page
+        in: query
+        schema:
+          type: integer
+          default: 1    
