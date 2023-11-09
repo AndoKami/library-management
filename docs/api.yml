@@ -156,6 +156,7 @@ paths:
             type: integer
             default: 50
           required: true
+        - $ref: "#/components/parameters/PathPagination"
       responses:
         200:
           description: OK
@@ -264,3 +265,16 @@ components:
         schema:
           type: integer
           default: 50 
+      PathPagination:
+        name: PathPagination
+        in: path
+        required: true
+        schema:
+          type: object
+          properties:
+            page:
+              type: integer
+              default : 1
+            size:
+              type: integer
+              default : 50    
