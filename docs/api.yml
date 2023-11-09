@@ -176,7 +176,7 @@ paths:
                 $ref: '#/components/schemas/UpdateBookAuthor'
       responses:
         200:
-          description: succes
+          description: succesc          
   /authors/{page}/{pageSize}:
     get:
       summary: Get paginated author
@@ -219,7 +219,7 @@ paths:
             default: 1
         - in: query
           name: pageSize
-          description: Number of topics/page
+          description: Number of topics
           required: false
           schema:
             type: integer
