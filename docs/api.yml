@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Library API
-  version: 2.2.0
+  version: 3.0.0
   description: STD22050
 servers:
   - url: https://library.com
